@@ -25,6 +25,7 @@ public class MainFrame extends JFrame{
         super("title");
 
         setSize(1280, 720);
+        setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -33,36 +34,37 @@ public class MainFrame extends JFrame{
         tPane.setBorder(BorderFactory.createEmptyBorder(10,20,20,20));
         add(tPane);
 
-        OrgPanel orgPanel = new OrgPanel();
+        OrgPanel orgPanel = new OrgPanel(tPane);
 
         tPane.addTab("Organizaion", orgPanel);
 
         
         
-        // JLabel schedulerLabel = new JLabel("두번째", SwingConstants.CENTER);
-        // JPanel schedulerPanel = new JPanel();
-        // schedulerPanel.add(schedulerLabel);
-        // tPane.addTab("Attack Component", schedulerPanel);
+        JLabel schedulerLabel = new JLabel("두번째", SwingConstants.CENTER);
+        JPanel schedulerPanel = new JPanel();
+        schedulerPanel.add(schedulerLabel);
+        tPane.addTab("Attack Component", schedulerPanel);
         
         
-        // JLabel reportLabel = new JLabel("세번째", SwingConstants.CENTER);
-        // JPanel reportPanel = new JPanel();
-        // reportPanel.add(reportLabel);
-        // tPane.addTab("Risk Component", reportPanel);
+        JLabel reportLabel = new JLabel("세번째", SwingConstants.CENTER);
+        JPanel reportPanel = new JPanel();
+        reportPanel.add(reportLabel);
+        tPane.addTab("Risk Component", reportPanel);
         
         
-        // JLabel diaryLabel = new JLabel("네번째", SwingConstants.CENTER);
-        // JPanel diaryPanel = new JPanel();
-        // diaryPanel.add(diaryLabel);
-        // tPane.addTab("Security Requirements", diaryPanel);
+        JLabel diaryLabel = new JLabel("네번째", SwingConstants.CENTER);
+        JPanel diaryPanel = new JPanel();
+        diaryPanel.add(diaryLabel);
+        tPane.addTab("Security Requirements", diaryPanel);
         
         
-        // JLabel diaLabel = new JLabel("다섯번째", SwingConstants.CENTER);
-        // JPanel diaPanel = new JPanel();
-        // diaPanel.add(diaLabel);
-        // tPane.addTab("Risk Assessment", diaPanel);
+        JLabel diaLabel = new JLabel("다섯번째", SwingConstants.CENTER);
+        JPanel diaPanel = new JPanel();
+        diaPanel.add(diaLabel);
+        tPane.addTab("Risk Assessment", diaPanel);
+
+        orgPanel.disableOtherTabs();
         
-        tPane.setEnabledAt(0, false);
         
         setVisible(true);
     }
