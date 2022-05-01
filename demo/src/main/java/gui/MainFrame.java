@@ -22,7 +22,7 @@ public class MainFrame extends JFrame{
 
     Container contentPane;
     public MainFrame(){
-        super("title");
+        super("");
 
         setSize(1280, 720);
         setResizable(false);
@@ -63,7 +63,7 @@ public class MainFrame extends JFrame{
         diaPanel.add(diaLabel);
         tPane.addTab("Risk Assessment", diaPanel);
 
-        orgPanel.disableOtherTabs();
+        // orgPanel.disableOtherTabs();
         
         
         setVisible(true);
