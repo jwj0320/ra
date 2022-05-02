@@ -14,7 +14,10 @@ import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
+import gui.tabbedContent.AtkPanel;
 import gui.tabbedContent.OrgPanel;
+import gui.tabbedContent.RiskPanel;
+import gui.tabbedContent.SecReqPanel;
 
 
 
@@ -35,27 +38,20 @@ public class MainFrame extends JFrame{
         add(tPane);
 
         OrgPanel orgPanel = new OrgPanel(tPane);
-
         tPane.addTab("Organizaion", orgPanel);
 
+        AtkPanel atkPanel = new AtkPanel(tPane);
+        tPane.addTab("Attack Component", atkPanel);
+
+        RiskPanel riskPanel = new RiskPanel(tPane);
+        tPane.addTab("Risk Component", riskPanel);
+
+        SecReqPanel secReqPanel = new SecReqPanel(tPane);
+        tPane.addTab("Security Requirements", secReqPanel);
         
+  
         
-        JLabel schedulerLabel = new JLabel("두번째", SwingConstants.CENTER);
-        JPanel schedulerPanel = new JPanel();
-        schedulerPanel.add(schedulerLabel);
-        tPane.addTab("Attack Component", schedulerPanel);
-        
-        
-        JLabel reportLabel = new JLabel("세번째", SwingConstants.CENTER);
-        JPanel reportPanel = new JPanel();
-        reportPanel.add(reportLabel);
-        tPane.addTab("Risk Component", reportPanel);
-        
-        
-        JLabel diaryLabel = new JLabel("네번째", SwingConstants.CENTER);
-        JPanel diaryPanel = new JPanel();
-        diaryPanel.add(diaryLabel);
-        tPane.addTab("Security Requirements", diaryPanel);
+
         
         
         JLabel diaLabel = new JLabel("다섯번째", SwingConstants.CENTER);

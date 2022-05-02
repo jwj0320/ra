@@ -22,12 +22,12 @@ import io.github.qualtagh.swing.table.model.ModelFieldGroup;
 import io.github.qualtagh.swing.table.model.ModelRow;
 import io.github.qualtagh.swing.table.view.JBroTable;
 
-public class OrgPanel extends TabPannel {
+public class OrgPanel extends GridBagPanel {
 
     public OrgPanel(JTabbedPane tabbedPane) {
         super(tabbedPane);
-        JPanel panel = this;
-        panel.setLayout(new GridBagLayout());
+        // JPanel panel = this;
+        // panel.setLayout(new GridBagLayout());
 
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -50,6 +50,7 @@ public class OrgPanel extends TabPannel {
 
         JButton createButton = new JButton("Create");
         addGBLComponent(createButton, 5, 1, 0.005, 0.1);
+
 
         IModelFieldGroup groups[] = new IModelFieldGroup[] {
                 new ModelField("Business Process", "Business Process"),

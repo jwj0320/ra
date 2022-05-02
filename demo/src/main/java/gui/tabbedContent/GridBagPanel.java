@@ -1,17 +1,22 @@
 package gui.tabbedContent;
 
+import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-public abstract class TabPannel extends JPanel {
+public class GridBagPanel extends JPanel {
 
     protected JTabbedPane tabbedPane;
+    protected JPanel panel;
+    
 
-    public TabPannel(JTabbedPane tabbedPane) {
+    public GridBagPanel(JTabbedPane tabbedPane) {
         this.tabbedPane = tabbedPane;
+        panel = this;
+        panel.setLayout(new GridBagLayout());
     }
 
     protected void addGBLComponent(JComponent component, int x, int y) {
