@@ -11,6 +11,11 @@ public class GridBagPanel extends JPanel {
 
     protected JTabbedPane tabbedPane;
     protected JPanel panel;
+
+    public GridBagPanel() {
+        panel = this;
+        panel.setLayout(new GridBagLayout());
+    }
     
 
     public GridBagPanel(JTabbedPane tabbedPane) {
