@@ -36,12 +36,15 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 import gui.tabbedContent.api.OntologyFunc;
+import gui.tabbedContent.type.Software;
+import gui.tabbedContent.type.TabbedPaneInfo;
+import gui.tabbedContent.type.Technique;
 
 public class AtkPanel extends GridBagPanel {
 
     OntologyFunc ontologyFunc = new OntologyFunc();
 
-    public AtkPanel(JTabbedPane tabbedPane){
+    public AtkPanel(TabbedPaneInfo tabbedPane){
         super(tabbedPane);
         setLayout(new BorderLayout());
         JTabbedPane innerTPane = new JTabbedPane(JTabbedPane.LEFT);
@@ -381,6 +384,7 @@ public class AtkPanel extends GridBagPanel {
                 String value = selectedTable.getValueAt(selectedTable.getSelectedRow(), 0).toString();
 
                 labelA.setText(value.split(":")[0]);
+            
 
                 ArrayList<String[]> platformList=ontologyFunc.LoadSWPlatform(value);
                 String[][] swPlatforms=new String[platformList.size()][1];
@@ -431,57 +435,36 @@ public class AtkPanel extends GridBagPanel {
         JLabel newLabel = new JLabel("New Case");
         panel.addGBLComponent(newLabel, 0, 0,4,1,0.0,0.0,"NONE",GridBagConstraints.LINE_START);
         
-        JLabel typeLabel = new JLabel("Type");
-        JButton typeButton = new JButton(">");
-        JTextField typeField = new JTextField();
-        typeField.setPreferredSize(new Dimension(200,28));
-        panel.addGBLComponent(typeLabel, 0, 1);
-        panel.addGBLComponent(typeField, 1, 1);
-        panel.addGBLComponent(typeButton, 2, 1);
-        
-
-        JLabel objectiveLabel = new JLabel("Objective");
-        JTextField objectiveField = new JTextField();
-        JButton objectiveButton = new JButton(">");
-        objectiveField.setPreferredSize(new Dimension(200,28));
-        panel.addGBLComponent(objectiveLabel, 0, 2);
-        panel.addGBLComponent(objectiveField, 1, 2);
-        panel.addGBLComponent(objectiveButton, 2, 2);
-
-        JLabel targetLabel = new JLabel("Target");
-        JTextField targetField = new JTextField();
-        JButton targetButton = new JButton(">");
-        targetField.setPreferredSize(new Dimension(200,28));
-        panel.addGBLComponent(targetLabel, 0, 3);
-        panel.addGBLComponent(targetField, 1, 3);
-        panel.addGBLComponent(targetButton, 2, 3);
-
+    
         JLabel tacticsLabel = new JLabel("Tactics");
         JTextField tacticsField = new JTextField();
-        JButton tacticsButton = new JButton(">");
         tacticsField.setPreferredSize(new Dimension(200,28));
-        panel.addGBLComponent(tacticsLabel, 0, 4);
-        panel.addGBLComponent(tacticsField, 1, 4);
-        panel.addGBLComponent(tacticsButton, 2, 4);
+        panel.addGBLComponent(tacticsLabel, 0, 1);
+        panel.addGBLComponent(tacticsField, 1, 1);
 
         JLabel techniqueLabel = new JLabel("Techniques");
         JTextField techniqueField = new JTextField();
-        JButton techniqueButton = new JButton(">");
         techniqueField.setPreferredSize(new Dimension(200,28));
-        panel.addGBLComponent(techniqueLabel, 0, 5);
-        panel.addGBLComponent(techniqueField, 1, 5);
-        panel.addGBLComponent(techniqueButton, 2, 5);
+        panel.addGBLComponent(techniqueLabel, 0, 2);
+        panel.addGBLComponent(techniqueField, 1, 2);
 
         JLabel softwareLabel = new JLabel("Software");
         JTextField softwareField = new JTextField();
-        JButton softwareButton = new JButton(">");
         softwareField.setPreferredSize(new Dimension(200,28));
-        panel.addGBLComponent(softwareLabel, 0, 6);
-        panel.addGBLComponent(softwareField, 1, 6);
-        panel.addGBLComponent(softwareButton, 2, 6);
+        panel.addGBLComponent(softwareLabel, 0, 3);
+        panel.addGBLComponent(softwareField, 1, 3);
 
-        JTextArea selectArea = new JTextArea();
-        panel.addGBLComponent(selectArea, 3, 1,1,7,0.1,0.1,"BOTH");
+        
+        JButton arrowButton = new JButton(">");
+        panel.addGBLComponent(arrowButton, 1, 4,0.0,0.0,"NONE",GridBagConstraints.LINE_END);
+
+        JLabel componentLabel = new JLabel("Attack Component");
+        JTable componentTable = new JTable(new DefaultTableModel(new String[]{"Tactics","Techniques","Software"},0));
+        JScrollPane compoTabSc= new JScrollPane(componentTable);
+        
+        panel.addGBLComponent(componentLabel, 2, 0);
+        panel.addGBLComponent(compoTabSc, 2, 1,4,4);
+
 
         return panel;
     }
@@ -511,4 +494,34 @@ public class AtkPanel extends GridBagPanel {
         table.setBackground(Color.white);
         return table;
     }
+
+    private Software makeSoftware(String value){
+        Software software = new Software(value);
+        
+        ArrayList<String[]> platformList=ontologyFunc.LoadSWPlatform(value);
+        String[] swPlatforms=new String[platformList.size()];
+
+        for (int i=0;i<platformList.size();i++){
+            swPlatforms[i]=platformList.get(i)[0];
+        }
+
+        ArrayList<String[]> techList=ontologyFunc.LoadSWTech(value);
+        // String[] swTechs=new String[techList.size()];
+        // for (int i=0;i<techList.size();i++){
+        //     swTechs[i]=techList.get(i)[0];
+        // }
+
+        software.setPlatforms(swPlatforms);
+        
+        Technique[] techs= new Technique[techList.size()];
+        for(int i=0;i<techList.size();i++){
+            techs[i]=new Technique(techList.get(i)[0]);
+        }
+
+        software.setTechniques(techs);
+        
+        return software;
+    }
+
+    
 }

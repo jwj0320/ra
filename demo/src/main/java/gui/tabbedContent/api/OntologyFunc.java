@@ -43,6 +43,35 @@ public class OntologyFunc {
 		} 	
 	}
 
+	// public ArrayList<String> LoadSWInfo(String SWvector){
+	// 	ArrayList<String> swInfo = new ArrayList<String>();
+	// 	String queryString = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
+	// 			+ "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n"
+	// 			+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+	// 			+ "PREFIX PDO: <http://www.semanticweb.org/PDO#>\n"
+	// 			+ "PREFIX CBSAO: <http://www.semanticweb.org/CBSAO#>\n"
+	// 			+ "SELECT ?s_p_l ?t_l\n"
+	// 			+ "WHERE { \n"
+	// 			+ "  ?s rdfs:label \""+ SWvector +"\".\n"
+	// 			+ "  ?s PDO:work_in_platforms ?s_p."
+	// 			+ "  ?s_p rdfs:label ?s_p_l."
+	// 			+ "  ?s PDO:perform_techniques ?t.\n"
+	// 			+ "  ?t rdfs:label ?t_l.\n"
+	// 			+ "}";
+	// 	Query query = QueryFactory.create(queryString);
+	// 	QueryExecution qe = QueryExecutionFactory.create(query, o.asGraphModel());
+	// 	ResultSet res = qe.execSelect();
+	// 	while (res.hasNext()) {
+	// 		QuerySolution qs = res.next();
+	// 		String s1 = qs.get("s_p_l").toString();
+	// 		String s2 = qs.get("t_l").toString();
+	// 		swInfo.add(s1);
+	// 		swInfo.add(s2);
+	// 	}
+		
+	// 	return swInfo;
+	// }
+
     public ArrayList<String> LoadTechniquesFromSW(String SWvector){
 		ArrayList<String> techlist = new ArrayList<String>();
 		String queryString = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
@@ -105,7 +134,8 @@ public class OntologyFunc {
 				+ "PREFIX CBSAO: <http://www.semanticweb.org/CBSAO#>\n"
 				+ "SELECT ?a_l\n"
 				+ "WHERE { \n"
-				+ "  ?a rdf:type PDO:AC-Software_Used.\n ?a rdfs:label ?a_l.\n"
+				+ "  ?a rdf:type PDO:AC-Software_Used.\n" 
+				+ "  ?a rdfs:label ?a_l.\n"
 				+ "}"
                 + "ORDER BY ASC(?a_l)";
 		

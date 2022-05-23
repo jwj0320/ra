@@ -30,17 +30,18 @@ public class RiskPanel extends GridBagPanel {
         tabPanel.setLayout(new BorderLayout());
 
         IModelFieldGroup groups[] = new IModelFieldGroup[] {
-                new ModelFieldGroup("Threat", "Threat")
-                        .withChild(new ModelField("Threat2","Threat"))
-                        .withChild(new ModelField("Group", "Group"))
-                        .withChild(new ModelField("Tactic","Tactic"))
+                new ModelFieldGroup("Threats", "Threats")
+                        .withChild(new ModelField("Threat ID","Threat ID"))
                         .withChild(new ModelField("Technique","Technique"))
-                        .withChild(new ModelField("Software","Software"))
-                        .withChild(new ModelField("Platform","Platform"))
-                        .withChild(new ModelField("Attack Pattern","Attack Pattern")),
+                        .withChild(new ModelField("Tactic","Tactic"))
+                        .withChild(new ModelField("Software","Software")),
                 new ModelFieldGroup("Vulnerability", "Vulnerability")
-                        .withChild(new ModelField("Weakness", "Weakness"))
-                        .withChild(new ModelField("Vulnerability2", "Vulnerability"))
+                        .withChild(new ModelField("CWE", "CWE"))
+                        .withChild(new ModelField("CVE", "CVE")),
+                new ModelFieldGroup("Assets", "Assets")
+                        .withChild(new ModelField("Asset ID", "Asset ID"))
+                        .withChild(new ModelField("Criticality", "Criticality"))
+                        .withChild(new ModelField("Exposure to threat", "Exposure to threat"))
         };
 
         // Get leafs of columns tree.
@@ -67,23 +68,23 @@ public class RiskPanel extends GridBagPanel {
         addGBLComponent(tabPanel, 0, 0,2,1,0.1,0.1,"BOTH");
 
         JButton nextButton = new JButton("Next");
-        nextButton.addActionListener(new ActionListener(){
-            private boolean isClicked = false;
+        // nextButton.addActionListener(new ActionListener(){
+        //     private boolean isClicked = false;
 
-            @Override
-            public void actionPerformed(ActionEvent e){
-                if (!isClicked){
-                    isClicked=true;
-                    JTable assetTable = new JTable();
-                    JScrollPane assetScrollPane = new JScrollPane(assetTable);
-                    tabPanel.removeAll();
-                    tabPanel.add(assetScrollPane);
-                    tabPanel.revalidate();
-                } else {
+        //     @Override
+        //     public void actionPerformed(ActionEvent e){
+        //         if (!isClicked){
+        //             isClicked=true;
+        //             JTable assetTable = new JTable();
+        //             JScrollPane assetScrollPane = new JScrollPane(assetTable);
+        //             tabPanel.removeAll();
+        //             tabPanel.add(assetScrollPane);
+        //             tabPanel.revalidate();
+        //         } else {
 
-                }
-            }
-        });
+        //         }
+        //     }
+        // });
 
         addGBLComponent(nextButton, 1, 1,0.1,0.1,"NONE",GridBagConstraints.LINE_END);
     }

@@ -14,10 +14,15 @@ import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
+import gui.tabbedContent.AssessPanel;
 import gui.tabbedContent.AtkPanel;
 import gui.tabbedContent.OrgPanel;
 import gui.tabbedContent.RiskPanel;
 import gui.tabbedContent.SecReqPanel;
+import gui.tabbedContent.type.Group;
+import gui.tabbedContent.type.Software;
+import gui.tabbedContent.type.TabbedPaneInfo;
+import gui.tabbedContent.type.Technique;
 
 
 
@@ -33,7 +38,7 @@ public class MainFrame extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         contentPane = this.getContentPane();
-        JTabbedPane tPane = new JTabbedPane();
+        TabbedPaneInfo tPane = new TabbedPaneInfo();
         tPane.setBorder(BorderFactory.createEmptyBorder(10,20,20,20));
         add(tPane);
 
@@ -49,20 +54,13 @@ public class MainFrame extends JFrame{
         SecReqPanel secReqPanel = new SecReqPanel(tPane);
         tPane.addTab("Security Requirements", secReqPanel);
         
-  
-        
-
-        
-        
-        JLabel diaLabel = new JLabel("다섯번째", SwingConstants.CENTER);
-        JPanel diaPanel = new JPanel();
-        diaPanel.add(diaLabel);
-        tPane.addTab("Risk Assessment", diaPanel);
+        AssessPanel assessPanel = new AssessPanel(tPane);
+        tPane.addTab("Risk Assessment", assessPanel);
 
         // orgPanel.disableOtherTabs();
-        
-        
+
         setVisible(true);
     }
 
 }
+
