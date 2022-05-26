@@ -64,9 +64,6 @@ public class AtkPanel extends GridBagPanel {
         JPanel ncPanel = makeNCPanel(innerTPane);
         innerTPane.addTab("New Case", ncPanel);
 
-        innerTPane.addTab("Result", new JPanel());
-        
-
     }
 
     private JPanel makeGrTab(JTabbedPane innerTPane){
@@ -469,31 +466,7 @@ public class AtkPanel extends GridBagPanel {
         return panel;
     }
 
-    private JLabel makeHeader(String text){
-        JLabel label = new JLabel(" "+text+" ");
-        label.setBorder(BorderFactory.createLineBorder(Color.gray));
-        label.setPreferredSize(new Dimension(140,30));
-        
-        return label;
-    }
-
-    private JLabel makeContent(String text){
-        JLabel label = new JLabel(" "+text+" ");
-        label.setBorder(BorderFactory.createLineBorder(Color.gray));
-        label.setPreferredSize(new Dimension(300,30));
-        label.setOpaque(true);
-        label.setBackground(Color.white);
-        
-        return label;
-    }
     
-    private JTable makeContentTable(){
-        JTable table = new JTable(new DefaultTableModel(new String[]{""},0));
-        table.setTableHeader(null);
-        table.setOpaque(true);
-        table.setBackground(Color.white);
-        return table;
-    }
 
     private Software makeSoftware(String value){
         Software software = new Software(value);

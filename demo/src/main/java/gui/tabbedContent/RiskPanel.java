@@ -4,15 +4,21 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
+import java.awt.Dimension;
+import java.awt.Color;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
+import gui.tabbedContent.api.OntologyFunc;
 import io.github.qualtagh.swing.table.model.IModelFieldGroup;
 import io.github.qualtagh.swing.table.model.ModelData;
 import io.github.qualtagh.swing.table.model.ModelField;
@@ -26,66 +32,36 @@ public class RiskPanel extends GridBagPanel {
         super(tabbedPane);
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        JPanel tabPanel = new JPanel();
-        tabPanel.setLayout(new BorderLayout());
+        JLabel nameLabel = new JLabel();
+        nameLabel.setText("Threat");
+        addGBLComponent(nameLabel, 0, 0,3,1,0.1,0.1,"NONE",GridBagConstraints.LINE_START);
 
-        IModelFieldGroup groups[] = new IModelFieldGroup[] {
-                new ModelFieldGroup("Threats", "Threats")
-                        .withChild(new ModelField("Threat ID","Threat ID"))
-                        .withChild(new ModelField("Technique","Technique"))
-                        .withChild(new ModelField("Tactic","Tactic"))
-                        .withChild(new ModelField("Software","Software")),
-                new ModelFieldGroup("Vulnerability", "Vulnerability")
-                        .withChild(new ModelField("CWE", "CWE"))
-                        .withChild(new ModelField("CVE", "CVE")),
-                new ModelFieldGroup("Assets", "Assets")
-                        .withChild(new ModelField("Asset ID", "Asset ID"))
-                        .withChild(new ModelField("Criticality", "Criticality"))
-                        .withChild(new ModelField("Exposure to threat", "Exposure to threat"))
-        };
 
-        // Get leafs of columns tree.
-        ModelField fields[] = ModelFieldGroup.getBottomFields(groups);
-
-        // Sample data.
-        ModelRow rows[] = new ModelRow[30];
-        for (int i = 0; i < rows.length; i++) {
-            rows[i] = new ModelRow(fields.length);
-            for (int j = 0; j < fields.length; j++)
-                rows[i].setValue(j, fields[j].getCaption() + i);
-        }
-
-        // Table.
-        ModelData data = new ModelData(groups);
-        data.setRows(rows);
-        JBroTable table = new JBroTable(data);
-        table.getTableHeader().setEnabled(false);
+        JLabel detailLabel = new JLabel();
+        detailLabel.setText("Attack Component");
+        addGBLComponent(detailLabel, 3, 0,0.1,0.1,"NONE",GridBagConstraints.LINE_START);
 
         
-        // vulPanel.addGBLComponent(table.getScrollPane(), 0, 0,0.1,0.1,"BOTH");
-        tabPanel.add(table.getScrollPane());
+        String[] header = {"Threat"};
+        
+        JTable table = new JTable(new DefaultTableModel(header,0));
 
-        addGBLComponent(tabPanel, 0, 0,2,1,0.1,0.1,"BOTH");
+        GridBagPanel detailPane = new GridBagPanel();
+        JLabel label0=makeHeader("Threat ID");
+        JLabel label1=makeHeader("Technique");
+        JLabel label2=makeHeader("Tactics");
+        JLabel label3=makeHeader("Software");
+        
+        detailPane.addGBLComponent(label0, 0, 0,1,1,"BOTH");
+        detailPane.addGBLComponent(label1, 0, 1,1,1,"BOTH");
+        detailPane.addGBLComponent(label2, 0, 2,1,1,"BOTH");
+        detailPane.addGBLComponent(label3, 0, 3,1,4,"BOTH");
+        
+        // 나중에 추가
+       
 
-        JButton nextButton = new JButton("Next");
-        // nextButton.addActionListener(new ActionListener(){
-        //     private boolean isClicked = false;
-
-        //     @Override
-        //     public void actionPerformed(ActionEvent e){
-        //         if (!isClicked){
-        //             isClicked=true;
-        //             JTable assetTable = new JTable();
-        //             JScrollPane assetScrollPane = new JScrollPane(assetTable);
-        //             tabPanel.removeAll();
-        //             tabPanel.add(assetScrollPane);
-        //             tabPanel.revalidate();
-        //         } else {
-
-        //         }
-        //     }
-        // });
-
-        addGBLComponent(nextButton, 1, 1,0.1,0.1,"NONE",GridBagConstraints.LINE_END);
+        
     }
+
+    
 }

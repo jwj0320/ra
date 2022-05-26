@@ -2,10 +2,16 @@ package gui.tabbedContent;
 
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.Dimension;
+import java.awt.Color;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class GridBagPanel extends JPanel {
 
@@ -228,6 +234,32 @@ public class GridBagPanel extends JPanel {
                 tabbedPane.setEnabledAt(i, false);
             }
         }
+    }
+
+    protected JLabel makeHeader(String text){
+        JLabel label = new JLabel(" "+text+" ");
+        label.setBorder(BorderFactory.createLineBorder(Color.gray));
+        // label.setPreferredSize(new Dimension(140,30));
+        
+        return label;
+    }
+
+    protected JLabel makeContent(String text){
+        JLabel label = new JLabel(" "+text+" ");
+        label.setBorder(BorderFactory.createLineBorder(Color.gray));
+        label.setPreferredSize(new Dimension(300,30));
+        label.setOpaque(true);
+        label.setBackground(Color.white);
+        
+        return label;
+    }
+    
+    protected JTable makeContentTable(){
+        JTable table = new JTable(new DefaultTableModel(new String[]{""},0));
+        table.setTableHeader(null);
+        table.setOpaque(true);
+        table.setBackground(Color.white);
+        return table;
     }
 
 }
