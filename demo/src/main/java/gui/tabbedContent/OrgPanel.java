@@ -69,42 +69,22 @@ public class OrgPanel extends GridBagPanel {
         addGBLComponent(createButton, 5, 1, 0.005, 0.1);
 
         GridBagPanel bpPane = new GridBagPanel();
-
+        //aaaaaaaaaaaaaaaaaaaaaa
         JLabel bplabel=makeHeader("Business Process");
         JLabel hlabel=makeHeader("Human");
         JLabel itslabel=makeHeader("Information Technology System");
         JLabel pelabel=makeHeader("Physical & Environment");
 
-        bpPane.addGBLComponent(bplabel, 0, 0,1,2,"BOTH");
-        bpPane.addGBLComponent(hlabel, 1, 0,2,1,"BOTH");
-        bpPane.addGBLComponent(itslabel, 3, 0,4,1,"BOTH");
-        bpPane.addGBLComponent(pelabel, 7, 0,4,1,"BOTH");
+        bpPane.addGBLComponent(bplabel, 0, 0,1,1,"BOTH");
+        bpPane.addGBLComponent(hlabel, 0, 1,1,1,"BOTH");
+        bpPane.addGBLComponent(itslabel, 0, 2,1,1,"BOTH");
+        bpPane.addGBLComponent(pelabel, 0, 3,1,1,"BOTH");
 
-        JLabel rolelabel=makeHeader("Role");
-        JLabel personlabel=makeHeader("Person");
-        JLabel softwarelabel=makeHeader("Software");
-        JLabel datalabel=makeHeader("Data");
-        JLabel platformlabel=makeHeader("Platform");
-        JLabel hardwarelabel=makeHeader("Hardware");
-        JLabel dalabel=makeHeader("DA");
-        JLabel celabel=makeHeader("CE");
-        JLabel selabel=makeHeader("SE");
-        JLabel mdlabel=makeHeader("MD");
+        
 
-        bpPane.addGBLComponent(rolelabel, 1, 1,1,1,"BOTH");
-        bpPane.addGBLComponent(personlabel,2, 1,1,1,"BOTH");
-        bpPane.addGBLComponent(softwarelabel, 3, 1,1,1,"BOTH");
-        bpPane.addGBLComponent(datalabel,4, 1,1,1,"BOTH");
-        bpPane.addGBLComponent(platformlabel, 5, 1,1,1,"BOTH");
-        bpPane.addGBLComponent(hardwarelabel, 6, 1,1,1,"BOTH");
-        bpPane.addGBLComponent(dalabel, 7, 1,1,1,"BOTH");
-        bpPane.addGBLComponent(celabel,8, 1,1,1,"BOTH");
-        bpPane.addGBLComponent(selabel, 9, 1,1,1,"BOTH");
-        bpPane.addGBLComponent(mdlabel, 10, 1,1,1,"BOTH");
-
-        JTable bpTable = makeContentTable();
+        JTable bpTable = new JTable(new DefaultTableModel(new String[]{"BP"},0));
         JScrollPane bpTbSc = new JScrollPane(bpTable);
-        bpTbSc.setPreferredSize(new Dimension(105,450));
+        bpTbSc.setPreferredSize(new Dimension(150,120));
         bpTbSc.getViewport().setBackground(Color.WHITE);
         
         orgComboBox.addActionListener(new ActionListener(){
@@ -116,11 +96,11 @@ public class OrgPanel extends GridBagPanel {
                 }
             }
         });
-        bpPane.addGBLComponent(bpTbSc, 0, 2,1,1,"BOTH");
+        bpPane.addGBLComponent(bpTbSc, 1, 0,1,1,"BOTH");
         
-        JTable roleTable = makeContentTable();
+        JTable roleTable = new JTable(new DefaultTableModel(new String[]{"Role"},0));
         JScrollPane roleTbSc = new JScrollPane(roleTable);
-        roleTbSc.setPreferredSize(new Dimension(105,450));
+        roleTbSc.setPreferredSize(new Dimension(150,120));
         roleTbSc.getViewport().setBackground(Color.WHITE);
 
         bpTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
@@ -132,11 +112,11 @@ public class OrgPanel extends GridBagPanel {
                 }
             }
         });
-        bpPane.addGBLComponent(roleTbSc, 1, 2,1,1,"BOTH");
+        bpPane.addGBLComponent(roleTbSc, 1, 1,1,1,"BOTH");
 
-        JTable personTable = makeContentTable();
+        JTable personTable = new JTable(new DefaultTableModel(new String[]{"Person"},0));
         JScrollPane personTbSc = new JScrollPane(personTable);
-        personTbSc.setPreferredSize(new Dimension(105,450));
+        personTbSc.setPreferredSize(new Dimension(150,120));
         personTbSc.getViewport().setBackground(Color.WHITE);
 
         roleTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
@@ -148,11 +128,11 @@ public class OrgPanel extends GridBagPanel {
                 }
             }
         });
-        bpPane.addGBLComponent(personTbSc, 2, 2,1,1,"BOTH");
+        bpPane.addGBLComponent(personTbSc, 2, 1,1,1,"BOTH");
         
-        JTable softwareTable = makeContentTable();
+        JTable softwareTable = new JTable(new DefaultTableModel(new String[]{"Software"},0));
         JScrollPane softwareTbSc = new JScrollPane(softwareTable);
-        softwareTbSc.setPreferredSize(new Dimension(105,450));
+        softwareTbSc.setPreferredSize(new Dimension(150,120));
         softwareTbSc.getViewport().setBackground(Color.WHITE);
 
         roleTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
@@ -164,11 +144,11 @@ public class OrgPanel extends GridBagPanel {
                 }
             }
         });
-        bpPane.addGBLComponent(softwareTbSc, 3, 2,1,1,"BOTH");
+        bpPane.addGBLComponent(softwareTbSc, 1, 2,1,1,"BOTH");
 
-        JTable dataTable = makeContentTable();
+        JTable dataTable = new JTable(new DefaultTableModel(new String[]{"Data"},0));
         JScrollPane dataTbSc = new JScrollPane(dataTable);
-        dataTbSc.setPreferredSize(new Dimension(105,450));
+        dataTbSc.setPreferredSize(new Dimension(150,120));
         dataTbSc.getViewport().setBackground(Color.WHITE);
 
         softwareTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
@@ -180,11 +160,11 @@ public class OrgPanel extends GridBagPanel {
                 }
             }
         });
-        bpPane.addGBLComponent(dataTbSc, 4, 2,1,1,"BOTH");
+        bpPane.addGBLComponent(dataTbSc, 2, 2,1,1,"BOTH");
 
-        JTable platformTable = makeContentTable();
+        JTable platformTable = new JTable(new DefaultTableModel(new String[]{"Platform"},0));
         JScrollPane platformTbSc = new JScrollPane(platformTable);
-        platformTbSc.setPreferredSize(new Dimension(105,450));
+        platformTbSc.setPreferredSize(new Dimension(150,120));
         platformTbSc.getViewport().setBackground(Color.WHITE);
 
         softwareTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
@@ -196,11 +176,11 @@ public class OrgPanel extends GridBagPanel {
                 }
             }
         });
-        bpPane.addGBLComponent(platformTbSc, 5, 2,1,1,"BOTH");
+        bpPane.addGBLComponent(platformTbSc, 3, 2,1,1,"BOTH");
 
-        JTable hardwareTable = makeContentTable();
+        JTable hardwareTable = new JTable(new DefaultTableModel(new String[]{"Hardware"},0));
         JScrollPane hardwareTbSc = new JScrollPane(hardwareTable);
-        hardwareTbSc.setPreferredSize(new Dimension(105,450));
+        hardwareTbSc.setPreferredSize(new Dimension(150,120));
         hardwareTbSc.getViewport().setBackground(Color.WHITE);
 
         softwareTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
@@ -212,27 +192,27 @@ public class OrgPanel extends GridBagPanel {
                 }
             }
         });
-        bpPane.addGBLComponent(hardwareTbSc, 6, 2,1,1,"BOTH");
+        bpPane.addGBLComponent(hardwareTbSc, 4, 2,1,1,"BOTH");
 
-        JTable daTable = makeContentTable();
+        JTable daTable = new JTable(new DefaultTableModel(new String[]{"DA"},0));
         JScrollPane daTbSc = new JScrollPane(daTable);
-        daTbSc.setPreferredSize(new Dimension(105,450));
+        daTbSc.setPreferredSize(new Dimension(150,120));
         daTbSc.getViewport().setBackground(Color.WHITE);
 
         hardwareTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
             @Override
             public void valueChanged(ListSelectionEvent e){
                 ((DefaultTableModel)daTable.getModel()).setRowCount(0);
-                for (String de : ontologyFunc2.LoadDAFromHW(hardwareTable.getValueAt(roleTable.getSelectedRow(),0).toString())) {
-                    ((DefaultTableModel) daTable.getModel()).addRow(new String[] { de });
+                for (String da : ontologyFunc2.LoadDAFromHW(hardwareTable.getValueAt(roleTable.getSelectedRow(),0).toString())) {
+                    ((DefaultTableModel) daTable.getModel()).addRow(new String[] { da });
                 }
             }
         });
-        bpPane.addGBLComponent(daTbSc, 7, 2,1,1,"BOTH");
+        bpPane.addGBLComponent(daTbSc, 1, 3,1,1,"BOTH");
 
-        JTable ceTable = makeContentTable();
+        JTable ceTable = new JTable(new DefaultTableModel(new String[]{"CE"},0));
         JScrollPane ceTbSc = new JScrollPane(ceTable);
-        ceTbSc.setPreferredSize(new Dimension(105,450));
+        ceTbSc.setPreferredSize(new Dimension(150,120));
         ceTbSc.getViewport().setBackground(Color.WHITE);
 
         // softwareTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
@@ -244,11 +224,11 @@ public class OrgPanel extends GridBagPanel {
         //         }
         //     }
         // });
-        bpPane.addGBLComponent(ceTbSc, 8, 2,1,1,"BOTH");
+        bpPane.addGBLComponent(ceTbSc, 2, 3,1,1,"BOTH");
 
-        JTable seTable = makeContentTable();
+        JTable seTable = new JTable(new DefaultTableModel(new String[]{"SE"},0));
         JScrollPane seTbSc = new JScrollPane(seTable);
-        seTbSc.setPreferredSize(new Dimension(105,450));
+        seTbSc.setPreferredSize(new Dimension(150,120));
         seTbSc.getViewport().setBackground(Color.WHITE);
 
         // softwareTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
@@ -260,11 +240,11 @@ public class OrgPanel extends GridBagPanel {
         //         }
         //     }
         // });
-        bpPane.addGBLComponent(seTbSc, 9, 2,1,1,"BOTH");
+        bpPane.addGBLComponent(seTbSc, 3, 3,1,1,"BOTH");
 
-        JTable mdTable = makeContentTable();
+        JTable mdTable = new JTable(new DefaultTableModel(new String[]{"MD"},0));
         JScrollPane mdTbSc = new JScrollPane(mdTable);
-        mdTbSc.setPreferredSize(new Dimension(105,450));
+        mdTbSc.setPreferredSize(new Dimension(150,120));
         mdTbSc.getViewport().setBackground(Color.WHITE);
 
         softwareTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
@@ -276,7 +256,7 @@ public class OrgPanel extends GridBagPanel {
                 }
             }
         });
-        bpPane.addGBLComponent(mdTbSc, 10, 2,1,1,"BOTH");
+        bpPane.addGBLComponent(mdTbSc, 4, 3,1,1,"BOTH");
 
 
         addGBLComponent(bpPane, 0, 2, 7, 1, 0.0, 0.4, "BOTH");
