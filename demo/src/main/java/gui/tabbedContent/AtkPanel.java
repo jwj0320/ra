@@ -118,17 +118,18 @@ public class AtkPanel extends GridBagPanel {
                 String value = nameTable.getValueAt(nameTable.getSelectedRow(), 0).toString();
 
                 
-                ArrayList<String[]> techList=ontologyFunc.LoadGroupTechnique(value);
+                ArrayList<String> techList=ontologyFunc.LoadGroupTechnique(value);
                 System.out.println("size: "+techList.size());
                 String[][] techs=new String[techList.size()][1];
                 for (int i=0;i<techList.size();i++){
-                    techs[i]=new String[]{techList.get(i)[0]};
+                    techs[i]=new String[]{techList.get(i)};
                 }
                 ((DefaultTableModel)techTable.getModel()).setRowCount(0);
                 for (String[] row : techs){
                     ((DefaultTableModel)techTable.getModel()).addRow(row);
                     System.out.println(row);
                 }
+                
 
                 
                 
@@ -142,6 +143,27 @@ public class AtkPanel extends GridBagPanel {
                 //     text+=", "+swPlatforms[i][0];
                 // }
             }
+        });
+
+        techTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            @Override
+            public void valueChanged(ListSelectionEvent e){
+                String group = nameTable.getValueAt(nameTable.getSelectedRow(), 0).toString();
+                String tech=techTable.getValueAt(techTable.getSelectedRow(), 0).toString();
+                ArrayList<String> groupSWList=ontologyFunc.LoadGroupSW(group);
+
+                ((DefaultTableModel)softTable.getModel()).setRowCount(0);
+                for (String software : ontologyFunc.LoadTechSW(tech)) {
+                    for (String groupSW : groupSWList) {
+                        if (groupSW.equals(software)){
+                            
+                            ((DefaultTableModel) softTable.getModel()).addRow(new String[] { software });
+
+                        }
+                    }
+                }
+            }
+            
         });
         
         return panel;

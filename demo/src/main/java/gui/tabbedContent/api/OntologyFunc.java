@@ -29,7 +29,7 @@ public class OntologyFunc {
 	OntologyModel o;
 
     public OntologyFunc(){
-        System.out.println("Load Ontology: " + LoadOntology());
+        System.out.println("Load Ontology: " + LoadOntology2());
     }
 
     public boolean LoadOntology() {
@@ -392,7 +392,7 @@ public class OntologyFunc {
 				+ "PREFIX CBSAO: <http://www.semanticweb.org/CBSAO#>\n"
 				+ "SELECT ?a_l\n"
 				+ "WHERE { \n"
-				+ "  ?a rdf:type PDO:AC-Attack_Groups.\n ?a rdfs:label ?a_l.\n"
+				+ "  ?a rdf:type PDO:Attack_Groups.\n ?a rdfs:label ?a_l.\n"
 				+ "}"
                 + "ORDER BY ASC(?a_l)";
 		
@@ -420,7 +420,7 @@ public class OntologyFunc {
 				+ "PREFIX CBSAO: <http://www.semanticweb.org/CBSAO#>\n"
 				+ "SELECT ?a_l\n"
 				+ "WHERE { \n"
-				+ "  ?a rdf:type PDO:AC-Software_Used.\n" 
+				+ "  ?a rdf:type PDO:Attack_Software.\n" 
 				+ "  ?a rdfs:label ?a_l.\n"
 				+ "}"
                 + "ORDER BY ASC(?a_l)";
@@ -450,7 +450,7 @@ public class OntologyFunc {
 				+ "PREFIX CBSAO: <http://www.semanticweb.org/CBSAO#>\n"
 				+ "SELECT ?a_l\n"
 				+ "WHERE { \n"
-				+ "  ?a rdf:type PDO:AC-Techniques_Used.\n ?a rdfs:label ?a_l.\n"
+				+ "  ?a rdf:type PDO:Attack_Techniques.\n ?a rdfs:label ?a_l.\n"
 				+ "}"
                 + "ORDER BY ASC(?a_l)";
 		
@@ -527,17 +527,19 @@ public class OntologyFunc {
 		return listvector;
 	}
     
-    public ArrayList<String[]> LoadGroupTechnique(String group) {
-		ArrayList<String[]> listvector = new ArrayList<String[]>();
+    public ArrayList<String> LoadGroupTechnique(String group) {
+		ArrayList<String> listvector = new ArrayList<String>();
 		String queryString = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
 				+ "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n"
 				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
 				+ "PREFIX PDO: <http://www.semanticweb.org/PDO#>\n"
 				+ "PREFIX CBSAO: <http://www.semanticweb.org/CBSAO#>\n"
-				+ "SELECT ?a_l ?a_c ?s_l WHERE { ?b rdfs:label \""+ group +"\".\n ?b PDO:use_techniques ?a. ?a rdfs:label ?a_l. "
-				+ "?a rdfs:comment ?a_c. ?sample rdf:type PDO:"+ group +". "
-				+ "?sample PDO:sample_of_use ?a. "
-				+ "?sample rdfs:label ?s_l.}";
+				+ "SELECT ?t_l \n"
+				+ "WHERE { "
+				+ "?g rdfs:label \""+ group +"\".\n"
+				+ "?g PDO:use_techniques ?t.\n"
+				+ "?t rdfs:label ?t_l. \n"
+				+ "}";
 		
 		
 		Query query = QueryFactory.create(queryString);
@@ -546,13 +548,69 @@ public class OntologyFunc {
 		
 		while (res.hasNext()) {
 			QuerySolution qs = res.next();
-			String s1 = qs.get("a_l").toString();
-			String s2 = qs.get("a_c").toString();
-			String s3 = qs.get("s_l").toString();
+			String s1 = qs.get("t_l").toString();
 			
-			listvector.add(new String[]{s1, s2, s3});
+			listvector.add(s1);
 		}	
 		
+		return listvector;
+	}
+
+	public ArrayList<String> LoadGroupSW(String group) {
+		ArrayList<String> listvector = new ArrayList<String>();
+		String queryString = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
+				+ "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n"
+				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+				+ "PREFIX PDO: <http://www.semanticweb.org/PDO#>\n"
+				+ "PREFIX CBSAO: <http://www.semanticweb.org/CBSAO#>\n"
+				+ "SELECT ?s_l \n"
+				+ "WHERE { "
+				+ "?g rdfs:label \""+ group +"\".\n"
+				+ "?g PDO:use_software ?s.\n"
+				+ "?s rdfs:label ?s_l. \n"
+				+ "}";
+		
+		
+		Query query = QueryFactory.create(queryString);
+		QueryExecution qe = QueryExecutionFactory.create(query, o.asGraphModel());
+		ResultSet res = qe.execSelect();
+		
+		while (res.hasNext()) {
+			QuerySolution qs = res.next();
+			String s1 = qs.get("s_l").toString();
+			
+			listvector.add(s1);
+		}	
+		
+		return listvector;
+	}
+
+	public ArrayList<String> LoadTechSW(String tech) {
+		ArrayList<String> listvector = new ArrayList<String>();
+		String queryString = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
+				+ "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n"
+				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+				+ "PREFIX PDO: <http://www.semanticweb.org/PDO#>\n"
+				+ "PREFIX CBSAO: <http://www.semanticweb.org/CBSAO#>\n"
+				+ "SELECT ?s_l \n"
+				+ "WHERE { "
+				+ "?g rdfs:label \""+ tech +"\".\n"
+				+ "?g PDO:performed_by ?s.\n"
+				+ "?s rdfs:label ?s_l. \n"
+				+ "}";
+		
+		
+		Query query = QueryFactory.create(queryString);
+		QueryExecution qe = QueryExecutionFactory.create(query, o.asGraphModel());
+		ResultSet res = qe.execSelect();
+		
+		while (res.hasNext()) {
+			QuerySolution qs = res.next();
+			String s1 = qs.get("s_l").toString();
+			
+			listvector.add(s1);
+		}	
+		System.out.println(listvector.size());
 		return listvector;
 	}
    
