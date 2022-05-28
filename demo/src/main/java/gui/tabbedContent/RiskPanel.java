@@ -17,6 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import gui.tabbedContent.api.OntologyFunc;
@@ -28,6 +30,9 @@ import io.github.qualtagh.swing.table.model.ModelRow;
 import io.github.qualtagh.swing.table.view.JBroTable;
 
 public class RiskPanel extends GridBagPanel {
+
+    private ArrayList<String[]> threat;
+    private JTable table;
     
     public RiskPanel(JTabbedPane tabbedPane) {
         super(tabbedPane);
@@ -44,7 +49,9 @@ public class RiskPanel extends GridBagPanel {
 
         String[] header = {"Threats"};
 
-        JTable table = new JTable(new DefaultTableModel(header,0));
+        table = new JTable(new DefaultTableModel(header,0));
+        
+
         JScrollPane thTabSc = new JScrollPane(table);
         thTabSc.setPreferredSize(new Dimension(10,10));
 
@@ -73,6 +80,19 @@ public class RiskPanel extends GridBagPanel {
         detailPane.addGBLComponent(swTableSc, 1, 3);
         
         addGBLComponent(detailPane, 1, 0,0.6,0.6,"BOTH");
+
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            @Override
+            public void valueChanged(ListSelectionEvent e){
+                String threat = table.getValueAt(table.getSelectedRow(), 0).toString();
+                int num=Integer.parseInt(threat.split("Threat ID")[0]);
+                System.out.println(num);
+                //
+                
+            }
+            
+        });
+
 
         JButton vulButton = new JButton("Vulnerability");
 
@@ -147,5 +167,23 @@ public class RiskPanel extends GridBagPanel {
             }
         });
     }
+
+    public ArrayList<String[]> getThreat() {
+        return threat;
+    }
+
+    public void setThreat(ArrayList<String[]> threat) {
+        this.threat = threat;
+    }
+
+    public void update(){
+        ((DefaultTableModel)table.getModel()).setRowCount(0);
+        int i=0;
+        for (String[] t : threat) {
+            ((DefaultTableModel) table.getModel()).addRow(new String[] { "Threat ID"+ ++i });
+
+        }
+    }
+
     
 }
