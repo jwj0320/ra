@@ -2,9 +2,13 @@ package gui;
 
 import java.awt.Container;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -30,8 +34,14 @@ public class MainFrame extends JFrame{
 
     Container contentPane;
     public MainFrame(){
-        super("");
-
+        super("Threat-driven Risk Assessment");
+        File imageFile = new File(this.getClass().getResource("").getPath(),"../../../icon.png");
+        try {
+            setIconImage(ImageIO.read(imageFile));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         setSize(1280, 720);
         setResizable(false);
         setLocationRelativeTo(null);

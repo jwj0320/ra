@@ -2,6 +2,7 @@ package gui.tabbedContent;
 
 import java.awt.GridBagConstraints;
 import java.awt.Dimension;
+import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -11,6 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 import io.github.qualtagh.swing.table.model.IModelFieldGroup;
 import io.github.qualtagh.swing.table.model.ModelData;
@@ -23,50 +26,152 @@ public class SecReqPanel extends GridBagPanel{
     
     public SecReqPanel(JTabbedPane tabbedPane){
         super(tabbedPane);
-        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        setBorder(
+            BorderFactory.createCompoundBorder(
+                BorderFactory.createEmptyBorder(10,10,10,10),
+                BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK),"Security Requirements")
+            )
+        );
+
+        String[] nameHeader = {"Threat ID"};
+        String[][] threats = new String[12][1];
+        for (int i=0;i<threats.length;i++){
+            threats[i][0]="Threat "+(i+1);
+        }
+
+        JTable threatTable = new JTable(threats,nameHeader);
+        JScrollPane threatTabSc = new JScrollPane(threatTable);
+        threatTabSc.setPreferredSize(new Dimension(130,520));
+        addGBLComponent(threatTabSc, 0, 0);
+
+        GridBagPanel detailPane = new GridBagPanel();
+        JLabel label0=makeHeader("Techniques");
+        JLabel label1=makeHeader("Tactics");
+        JLabel label2=makeHeader("Software");
+        JLabel label3=makeHeader("Mitigation");
+
+        JLabel labelA=makeContent("T1003.002:OS Credential Dumping: Security Account Manager");
+        JLabel labelB=makeContent("Credential Access");
+        JTable softTable = makeContentTable();
+        ((DefaultTableModel)softTable.getModel()).addRow(new String[]{"S0154:Cobalt Strike"});
+        ((DefaultTableModel)softTable.getModel()).addRow(new String[]{"S0002:Mimikatz"});
+        JScrollPane softTabSc = new JScrollPane(softTable);
+        softTabSc.setPreferredSize(new Dimension(130,230));
+        JTable mitiTable = makeContentTable();
+        ((DefaultTableModel)mitiTable.getModel()).addRow(new String[]{"M1028:Operating System Configuration"});
+        ((DefaultTableModel)mitiTable.getModel()).addRow(new String[]{"M1027:Password Policies"});
+        ((DefaultTableModel)mitiTable.getModel()).addRow(new String[]{"M1026:Privileged Account Management"});
+        ((DefaultTableModel)mitiTable.getModel()).addRow(new String[]{"M1017:User Training"});
+        JScrollPane mitiTabSc = new JScrollPane(mitiTable);
+        mitiTabSc.setPreferredSize(new Dimension(200,230));
+
+
+        detailPane.addGBLComponent(label0, 0, 0,1,1,"BOTH");
+        detailPane.addGBLComponent(label1, 0, 1,1,1,"BOTH");
+        detailPane.addGBLComponent(label2, 0, 2,1,1,"BOTH");
+        detailPane.addGBLComponent(label3, 0, 3,1,1,"BOTH");
+        detailPane.addGBLComponent(softTabSc, 1, 2,2,1,"BOTH");
+        detailPane.addGBLComponent(mitiTabSc, 1, 3,1,1,"BOTH");
+        detailPane.addGBLComponent(labelA, 1, 0,1,1,"BOTH");
+        detailPane.addGBLComponent(labelB, 1, 1,1,1,"BOTH");
+
+        System.out.println(detailPane.getPreferredSize());
+        addGBLComponent(detailPane, 1, 0);
+
+        GridBagPanel inputPane = new GridBagPanel();
+        inputPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK),"Input"));
+        JLabel label2_0=new JLabel("Detect(DT) : ");
+        JLabel label2_1=new JLabel("Respond(RP) : ");
+        JLabel label2_2=new JLabel("Predict(PD) : ");
+        JLabel label2_3=new JLabel("Prevent(PV) : ");
+
+        JTextField dtField = new JTextField();
+        dtField.setPreferredSize(new Dimension(400,60));
+        JTextField rpField = new JTextField();
+        rpField.setPreferredSize(new Dimension(400,60));
+        JTextField pdField = new JTextField();
+        pdField.setPreferredSize(new Dimension(400,60));
+        JTextField pvField = new JTextField();
+        pvField.setPreferredSize(new Dimension(400,60));
+         
+
+        inputPane.addGBLComponent(label2_0, 0, 0,1,1,"BOTH");
+        inputPane.addGBLComponent(label2_1, 0, 2,1,1,"BOTH");
+        inputPane.addGBLComponent(label2_2, 0, 4,1,1,"BOTH");
+        inputPane.addGBLComponent(label2_3, 0, 6,1,1,"BOTH");
+
+
+        inputPane.addGBLComponent(dtField, 1, 0,1,1,"BOTH");
+        inputPane.addGBLComponent(rpField, 1, 2,1,1,"BOTH");
+        inputPane.addGBLComponent(pdField, 1, 4,1,1,"BOTH");
+        inputPane.addGBLComponent(pvField, 1, 6,1,1,"BOTH");
+
+        JLabel emptyLabel = new JLabel();
+        emptyLabel.setPreferredSize(new Dimension(200,30));
+        JLabel emptyLabel2 = new JLabel();
+        emptyLabel2.setPreferredSize(new Dimension(200,30));
+        JLabel emptyLabel3 = new JLabel();
+        emptyLabel3.setPreferredSize(new Dimension(200,30));
+
+        inputPane.addGBLComponent(emptyLabel, 0, 1,1,1,"BOTH");
+        inputPane.addGBLComponent(emptyLabel2, 0, 3,1,1,"BOTH");
+        inputPane.addGBLComponent(emptyLabel3, 0, 5,1,1,"BOTH");
+
+        JLabel emptyLabel4 = new JLabel();
+        emptyLabel4.setPreferredSize(new Dimension(200,165));
+        
+        inputPane.addGBLComponent(emptyLabel4, 0, 7,1,1,"BOTH");
+
+        System.out.println(inputPane.getPreferredSize());
+        addGBLComponent(inputPane, 2, 0,2,1);
+        System.out.println(new JButton("aa").getPreferredSize());
 
         JButton nextButton = new JButton("Next");
 
+        addGBLComponent(nextButton, 3, 1,0.0,0.0,"NONE",GridBagConstraints.LINE_END);
 
-        IModelFieldGroup groups[] = new IModelFieldGroup[] {
-                new ModelField("Threat", "Threat"),
-                new ModelField("Technique", "Technique"),
-                new ModelField("Tactics", "Tactics"),
-                new ModelField("Software", "Software"),
-                new ModelField("Mitigation", "Mitigation"),
-                new ModelFieldGroup("Adaptive Security Requirements", "Adaptive Security Requirements")
-                        .withChild(new ModelField("DT", "DT"))
-                        .withChild(new ModelField("RP", "RP"))
-                        .withChild(new ModelField("PD", "PD"))
-                        .withChild(new ModelField("PV", "PV"))
-        };
+        // JButton nextButton = new JButton("Next");
 
-        // Get leafs of columns tree.
-        ModelField fields[] = ModelFieldGroup.getBottomFields(groups);
 
-        // Sample data.
-        ModelRow rows[] = new ModelRow[30];
-        for (int i = 0; i < rows.length; i++) {
-            rows[i] = new ModelRow(fields.length);
-            for (int j = 0; j < fields.length; j++)
-                rows[i].setValue(j, fields[j].getCaption() + i);
-        }
+        // IModelFieldGroup groups[] = new IModelFieldGroup[] {
+        //         new ModelField("Threat", "Threat"),
+        //         new ModelField("Technique", "Technique"),
+        //         new ModelField("Tactics", "Tactics"),
+        //         new ModelField("Software", "Software"),
+        //         new ModelField("Mitigation", "Mitigation"),
+        //         new ModelFieldGroup("Adaptive Security Requirements", "Adaptive Security Requirements")
+        //                 .withChild(new ModelField("DT", "DT"))
+        //                 .withChild(new ModelField("RP", "RP"))
+        //                 .withChild(new ModelField("PD", "PD"))
+        //                 .withChild(new ModelField("PV", "PV"))
+        // };
 
-        // Table.
-        ModelData data = new ModelData(groups);
-        data.setRows(rows);
-        JBroTable table = new JBroTable(data);
-        table.getTableHeader().setEnabled(false);
+        // // Get leafs of columns tree.
+        // ModelField fields[] = ModelFieldGroup.getBottomFields(groups);
 
-        addGBLComponent(table.getScrollPane(), 0, 1,4,1,0.6,0.8,"BOTH");
+        // // Sample data.
+        // ModelRow rows[] = new ModelRow[30];
+        // for (int i = 0; i < rows.length; i++) {
+        //     rows[i] = new ModelRow(fields.length);
+        //     for (int j = 0; j < fields.length; j++)
+        //         rows[i].setValue(j, fields[j].getCaption() + i);
+        // }
+
+        // // Table.
+        // ModelData data = new ModelData(groups);
+        // data.setRows(rows);
+        // JBroTable table = new JBroTable(data);
+        // table.getTableHeader().setEnabled(false);
+
+        // addGBLComponent(table.getScrollPane(), 0, 1,4,1,0.6,0.8,"BOTH");
 
  
 
-        JButton closeButton = new JButton("Edit");
-        addGBLComponent(closeButton, 2, 2,0.8,0.1,"NONE",GridBagConstraints.LINE_END);
+        // JButton closeButton = new JButton("Edit");
+        // addGBLComponent(closeButton, 2, 2,0.8,0.1,"NONE",GridBagConstraints.LINE_END);
 
 
-        addGBLComponent(nextButton, 3, 2,0.1,0.1,"NONE");
+        // addGBLComponent(nextButton, 3, 2,0.1,0.1,"NONE");
 
 
 
