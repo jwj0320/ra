@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.Component;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -18,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -33,6 +35,7 @@ import io.github.qualtagh.swing.table.model.ModelRow;
 import io.github.qualtagh.swing.table.view.JBroTable;
 
 public class OrgPanel extends GridBagPanel {
+    // 선택 역방향 추가 필요
 
     public OrgPanel(JTabbedPane tabbedPane) {
         super(tabbedPane);
@@ -69,150 +72,190 @@ public class OrgPanel extends GridBagPanel {
         addGBLComponent(createButton, 5, 1, 0.005, 0.1);
 
         GridBagPanel bpPane = new GridBagPanel();
-        //aaaaaaaaaaaaaaaaaaaaaa
+
         JLabel bplabel=makeHeader("Business Process");
         JLabel hlabel=makeHeader("Human");
         JLabel itslabel=makeHeader("Information Technology System");
         JLabel pelabel=makeHeader("Physical & Environment");
 
-        bpPane.addGBLComponent(bplabel, 0, 0,1,1,"BOTH");
-        bpPane.addGBLComponent(hlabel, 0, 1,1,1,"BOTH");
-        bpPane.addGBLComponent(itslabel, 0, 2,1,1,"BOTH");
-        bpPane.addGBLComponent(pelabel, 0, 3,1,1,"BOTH");
+        bpPane.addGBLComponent(bplabel, 0, 0,1,2,"BOTH");
+        bpPane.addGBLComponent(hlabel, 1, 0,2,1,"BOTH");
+        bpPane.addGBLComponent(itslabel, 3, 0,4,1,"BOTH");
+        bpPane.addGBLComponent(pelabel, 7, 0,4,1,"BOTH");
 
-        
+        JLabel rolelabel=makeHeader("Role");
+        JLabel personlabel=makeHeader("Person");
+        JLabel softwarelabel=makeHeader("Software");
+        JLabel datalabel=makeHeader("Data");
+        JLabel platformlabel=makeHeader("Platform");
+        JLabel hardwarelabel=makeHeader("Hardware");
+        JLabel dalabel=makeHeader("DA");
+        JLabel celabel=makeHeader("CE");
+        JLabel selabel=makeHeader("SE");
+        JLabel mdlabel=makeHeader("MD");
 
-        JTable bpTable = new JTable(new DefaultTableModel(new String[]{"BP"},0));
+        bpPane.addGBLComponent(rolelabel, 1, 1,1,1,"BOTH");
+        bpPane.addGBLComponent(personlabel,2, 1,1,1,"BOTH");
+        bpPane.addGBLComponent(softwarelabel, 3, 1,1,1,"BOTH");
+        bpPane.addGBLComponent(datalabel,4, 1,1,1,"BOTH");
+        bpPane.addGBLComponent(platformlabel, 5, 1,1,1,"BOTH");
+        bpPane.addGBLComponent(hardwarelabel, 6, 1,1,1,"BOTH");
+        bpPane.addGBLComponent(dalabel, 7, 1,1,1,"BOTH");
+        bpPane.addGBLComponent(celabel,8, 1,1,1,"BOTH");
+        bpPane.addGBLComponent(selabel, 9, 1,1,1,"BOTH");
+        bpPane.addGBLComponent(mdlabel, 10, 1,1,1,"BOTH");
+
+        JTable bpTable = makeContentTable();
         JScrollPane bpTbSc = new JScrollPane(bpTable);
-        bpTbSc.setPreferredSize(new Dimension(150,120));
+        bpTbSc.setPreferredSize(new Dimension(105,450));
         bpTbSc.getViewport().setBackground(Color.WHITE);
         
-        orgComboBox.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
-                ((DefaultTableModel)bpTable.getModel()).setRowCount(0);
-                for (String bp : ontologyFunc2.LoadBPFromOrg(orgComboBox.getSelectedItem().toString())) {
-                    ((DefaultTableModel) bpTable.getModel()).addRow(new String[] { bp });
-                }
-            }
-        });
-        bpPane.addGBLComponent(bpTbSc, 1, 0,1,1,"BOTH");
         
-        JTable roleTable = new JTable(new DefaultTableModel(new String[]{"Role"},0));
+        bpPane.addGBLComponent(bpTbSc, 0, 2,1,1,"BOTH");
+        
+        JTable roleTable = makeContentTable();
         JScrollPane roleTbSc = new JScrollPane(roleTable);
-        roleTbSc.setPreferredSize(new Dimension(150,120));
+        roleTbSc.setPreferredSize(new Dimension(105,450));
         roleTbSc.getViewport().setBackground(Color.WHITE);
 
         bpTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
             @Override
             public void valueChanged(ListSelectionEvent e){
-                ((DefaultTableModel)roleTable.getModel()).setRowCount(0);
+                if (e.getValueIsAdjusting() || bpTable.getSelectedRowCount()==0){
+                    return;
+                }
+                roleTable.clearSelection();
                 for (String role : ontologyFunc2.LoadRoleFromBP(bpTable.getValueAt(bpTable.getSelectedRow(),0).toString())) {
-                    ((DefaultTableModel) roleTable.getModel()).addRow(new String[] { role });
+                    int index = findRow(roleTable, role);
+                    roleTable.addRowSelectionInterval(index,index);
                 }
             }
         });
-        bpPane.addGBLComponent(roleTbSc, 1, 1,1,1,"BOTH");
+        bpPane.addGBLComponent(roleTbSc, 1, 2,1,1,"BOTH");
 
-        JTable personTable = new JTable(new DefaultTableModel(new String[]{"Person"},0));
+        JTable personTable = makeContentTable();
         JScrollPane personTbSc = new JScrollPane(personTable);
-        personTbSc.setPreferredSize(new Dimension(150,120));
+        personTbSc.setPreferredSize(new Dimension(105,450));
         personTbSc.getViewport().setBackground(Color.WHITE);
 
         roleTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
             @Override
             public void valueChanged(ListSelectionEvent e){
-                ((DefaultTableModel)personTable.getModel()).setRowCount(0);
+                if (e.getValueIsAdjusting() || roleTable.getSelectedRowCount()==0){
+                    return;
+                }
+                personTable.clearSelection();
                 for (String person : ontologyFunc2.LoadPersonFromRole(roleTable.getValueAt(roleTable.getSelectedRow(),0).toString())) {
-                    ((DefaultTableModel) personTable.getModel()).addRow(new String[] { person });
+                    int index = findRow(personTable, person);
+                    personTable.addRowSelectionInterval(index,index);
                 }
             }
         });
-        bpPane.addGBLComponent(personTbSc, 2, 1,1,1,"BOTH");
+        bpPane.addGBLComponent(personTbSc, 2, 2,1,1,"BOTH");
         
-        JTable softwareTable = new JTable(new DefaultTableModel(new String[]{"Software"},0));
+        JTable softwareTable = makeContentTable();
         JScrollPane softwareTbSc = new JScrollPane(softwareTable);
-        softwareTbSc.setPreferredSize(new Dimension(150,120));
+        softwareTbSc.setPreferredSize(new Dimension(105,450));
         softwareTbSc.getViewport().setBackground(Color.WHITE);
 
         roleTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
             @Override
             public void valueChanged(ListSelectionEvent e){
-                ((DefaultTableModel)softwareTable.getModel()).setRowCount(0);
+                if (e.getValueIsAdjusting() || roleTable.getSelectedRowCount()==0){
+                    return;
+                }
+                softwareTable.clearSelection();
                 for (String software : ontologyFunc2.LoadSWFromRole(roleTable.getValueAt(roleTable.getSelectedRow(),0).toString())) {
-                    ((DefaultTableModel) softwareTable.getModel()).addRow(new String[] { software });
+                    int index = findRow(softwareTable, software);
+                    softwareTable.addRowSelectionInterval(index,index);
                 }
             }
         });
-        bpPane.addGBLComponent(softwareTbSc, 1, 2,1,1,"BOTH");
+        bpPane.addGBLComponent(softwareTbSc, 3, 2,1,1,"BOTH");
 
-        JTable dataTable = new JTable(new DefaultTableModel(new String[]{"Data"},0));
+        JTable dataTable = makeContentTable();
         JScrollPane dataTbSc = new JScrollPane(dataTable);
-        dataTbSc.setPreferredSize(new Dimension(150,120));
+        dataTbSc.setPreferredSize(new Dimension(105,450));
         dataTbSc.getViewport().setBackground(Color.WHITE);
 
         softwareTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
             @Override
             public void valueChanged(ListSelectionEvent e){
-                ((DefaultTableModel)dataTable.getModel()).setRowCount(0);
+                if (e.getValueIsAdjusting() || softwareTable.getSelectedRowCount()==0){
+                    return;
+                }
+                dataTable.clearSelection();
                 for (String data : ontologyFunc2.LoadDataFromSW(softwareTable.getValueAt(roleTable.getSelectedRow(),0).toString())) {
-                    ((DefaultTableModel) dataTable.getModel()).addRow(new String[] { data });
+                    int index = findRow(dataTable, data);
+                    dataTable.addRowSelectionInterval(index,index);
                 }
             }
         });
-        bpPane.addGBLComponent(dataTbSc, 2, 2,1,1,"BOTH");
+        bpPane.addGBLComponent(dataTbSc, 4, 2,1,1,"BOTH");
 
-        JTable platformTable = new JTable(new DefaultTableModel(new String[]{"Platform"},0));
+        JTable platformTable = makeContentTable();
         JScrollPane platformTbSc = new JScrollPane(platformTable);
-        platformTbSc.setPreferredSize(new Dimension(150,120));
+        platformTbSc.setPreferredSize(new Dimension(105,450));
         platformTbSc.getViewport().setBackground(Color.WHITE);
 
         softwareTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
             @Override
             public void valueChanged(ListSelectionEvent e){
-                ((DefaultTableModel)platformTable.getModel()).setRowCount(0);
+                if (e.getValueIsAdjusting() || softwareTable.getSelectedRowCount()==0){
+                    return;
+                }
+                platformTable.clearSelection();
                 for (String platform : ontologyFunc2.LoadPlatformFromSW(softwareTable.getValueAt(roleTable.getSelectedRow(),0).toString())) {
-                    ((DefaultTableModel) platformTable.getModel()).addRow(new String[] { platform });
+                    int index = findRow(platformTable, platform);
+                    platformTable.addRowSelectionInterval(index,index);
                 }
             }
         });
-        bpPane.addGBLComponent(platformTbSc, 3, 2,1,1,"BOTH");
+        bpPane.addGBLComponent(platformTbSc, 5, 2,1,1,"BOTH");
 
-        JTable hardwareTable = new JTable(new DefaultTableModel(new String[]{"Hardware"},0));
+        JTable hardwareTable = makeContentTable();
         JScrollPane hardwareTbSc = new JScrollPane(hardwareTable);
-        hardwareTbSc.setPreferredSize(new Dimension(150,120));
+        hardwareTbSc.setPreferredSize(new Dimension(105,450));
         hardwareTbSc.getViewport().setBackground(Color.WHITE);
 
         softwareTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
             @Override
             public void valueChanged(ListSelectionEvent e){
-                ((DefaultTableModel)hardwareTable.getModel()).setRowCount(0);
+                if (e.getValueIsAdjusting() || softwareTable.getSelectedRowCount()==0){
+                    return;
+                }
+                hardwareTable.clearSelection();
                 for (String hardware : ontologyFunc2.LoadHardwareFromSW(softwareTable.getValueAt(roleTable.getSelectedRow(),0).toString())) {
-                    ((DefaultTableModel) hardwareTable.getModel()).addRow(new String[] { hardware });
+                    int index = findRow(hardwareTable, hardware);
+                    hardwareTable.addRowSelectionInterval(index,index);
                 }
             }
         });
-        bpPane.addGBLComponent(hardwareTbSc, 4, 2,1,1,"BOTH");
+        bpPane.addGBLComponent(hardwareTbSc, 6, 2,1,1,"BOTH");
 
-        JTable daTable = new JTable(new DefaultTableModel(new String[]{"DA"},0));
+        JTable daTable = makeContentTable();
         JScrollPane daTbSc = new JScrollPane(daTable);
-        daTbSc.setPreferredSize(new Dimension(150,120));
+        daTbSc.setPreferredSize(new Dimension(105,450));
         daTbSc.getViewport().setBackground(Color.WHITE);
 
         hardwareTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
             @Override
             public void valueChanged(ListSelectionEvent e){
-                ((DefaultTableModel)daTable.getModel()).setRowCount(0);
+                if (e.getValueIsAdjusting() || hardwareTable.getSelectedRowCount()==0){
+                    return;
+                }
+                daTable.clearSelection();
                 for (String da : ontologyFunc2.LoadDAFromHW(hardwareTable.getValueAt(roleTable.getSelectedRow(),0).toString())) {
-                    ((DefaultTableModel) daTable.getModel()).addRow(new String[] { da });
+                    int index = findRow(daTable, da);
+                    daTable.addRowSelectionInterval(index,index);
                 }
             }
         });
-        bpPane.addGBLComponent(daTbSc, 1, 3,1,1,"BOTH");
+        bpPane.addGBLComponent(daTbSc, 7, 2,1,1,"BOTH");
 
-        JTable ceTable = new JTable(new DefaultTableModel(new String[]{"CE"},0));
+        JTable ceTable = makeContentTable();
         JScrollPane ceTbSc = new JScrollPane(ceTable);
-        ceTbSc.setPreferredSize(new Dimension(150,120));
+        ceTbSc.setPreferredSize(new Dimension(105,450));
         ceTbSc.getViewport().setBackground(Color.WHITE);
 
         // softwareTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
@@ -224,11 +267,11 @@ public class OrgPanel extends GridBagPanel {
         //         }
         //     }
         // });
-        bpPane.addGBLComponent(ceTbSc, 2, 3,1,1,"BOTH");
+        bpPane.addGBLComponent(ceTbSc, 8, 2,1,1,"BOTH");
 
-        JTable seTable = new JTable(new DefaultTableModel(new String[]{"SE"},0));
+        JTable seTable = makeContentTable();
         JScrollPane seTbSc = new JScrollPane(seTable);
-        seTbSc.setPreferredSize(new Dimension(150,120));
+        seTbSc.setPreferredSize(new Dimension(105,450));
         seTbSc.getViewport().setBackground(Color.WHITE);
 
         // softwareTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
@@ -240,26 +283,98 @@ public class OrgPanel extends GridBagPanel {
         //         }
         //     }
         // });
-        bpPane.addGBLComponent(seTbSc, 3, 3,1,1,"BOTH");
+        bpPane.addGBLComponent(seTbSc, 9, 2,1,1,"BOTH");
 
-        JTable mdTable = new JTable(new DefaultTableModel(new String[]{"MD"},0));
+        JTable mdTable = makeContentTable();
         JScrollPane mdTbSc = new JScrollPane(mdTable);
-        mdTbSc.setPreferredSize(new Dimension(150,120));
+        mdTbSc.setPreferredSize(new Dimension(105,450));
         mdTbSc.getViewport().setBackground(Color.WHITE);
 
         softwareTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
             @Override
             public void valueChanged(ListSelectionEvent e){
-                ((DefaultTableModel)mdTable.getModel()).setRowCount(0);
+                if (e.getValueIsAdjusting() || softwareTable.getSelectedRowCount()==0){
+                    return;
+                }
+                mdTable.clearSelection();
                 for (String md : ontologyFunc2.LoadMDFromSW(softwareTable.getValueAt(roleTable.getSelectedRow(),0).toString())) {
-                    ((DefaultTableModel) mdTable.getModel()).addRow(new String[] { md });
+                    int index = findRow(mdTable, md);
+                    mdTable.addRowSelectionInterval(index,index);
                 }
             }
         });
-        bpPane.addGBLComponent(mdTbSc, 4, 3,1,1,"BOTH");
+        bpPane.addGBLComponent(mdTbSc, 10, 2,1,1,"BOTH");
 
 
         addGBLComponent(bpPane, 0, 2, 7, 1, 0.0, 0.4, "BOTH");
+
+        orgComboBox.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                ((DefaultTableModel)bpTable.getModel()).setRowCount(0);
+                ArrayList<String> bps = ontologyFunc2.LoadBPFromOrg(orgComboBox.getSelectedItem().toString());
+                for (String bp : bps) {
+                    ((DefaultTableModel) bpTable.getModel()).addRow(new String[] { bp });
+                    ArrayList<String> roles = ontologyFunc2.LoadRoleFromBP(bp);
+                    for (String role : roles) {
+                        if(isIn(roleTable,role)){
+                            continue;
+                        }
+                        ((DefaultTableModel) roleTable.getModel()).addRow(new String[] { role });
+                        ArrayList<String> people = ontologyFunc2.LoadPersonFromRole(role);
+                        for (String person : people) {
+                            if(isIn(personTable,person)){
+                                continue;
+                            }
+                            ((DefaultTableModel) personTable.getModel()).addRow(new String[] { person });
+                        }
+                        ArrayList<String> softwares = ontologyFunc2.LoadSWFromRole(role);
+                        for (String software : softwares) {
+                            if(isIn(softwareTable,software)){
+                                continue;
+                            }
+                            ((DefaultTableModel) softwareTable.getModel()).addRow(new String[] { software });
+                            ArrayList<String> datas = ontologyFunc2.LoadDataFromSW(software);
+                            for (String data : datas) {
+                                if(isIn(dataTable,data)){
+                                    continue;
+                                }
+                                ((DefaultTableModel) dataTable.getModel()).addRow(new String[] { data });
+                            }
+                            ArrayList<String> platforms = ontologyFunc2.LoadPlatformFromSW(software);
+                            for (String platform : platforms) {
+                                if(isIn(platformTable,platform)){
+                                    continue;
+                                }
+                                ((DefaultTableModel) platformTable.getModel()).addRow(new String[] { platform });
+                            }
+                            ArrayList<String> hardwares=ontologyFunc2.LoadHardwareFromSW(software);
+                            for (String hardware : hardwares) {
+                                if(isIn(hardwareTable,hardware)){
+                                    continue;
+                                }
+                                ((DefaultTableModel) hardwareTable.getModel()).addRow(new String[] { hardware });
+                                ArrayList<String> das = ontologyFunc2.LoadDAFromHW(hardware);
+                                for (String da : das) {
+                                    if(isIn(daTable,da)){
+                                        continue;
+                                    }
+                                    ((DefaultTableModel) daTable.getModel()).addRow(new String[] { da });
+                                }
+                            }
+                            ArrayList<String> mds=ontologyFunc2.LoadMDFromSW(software);
+                            for (String md : mds) {
+                                if(isIn(mdTable,md)){
+                                    continue;
+                                }
+                                ((DefaultTableModel) mdTable.getModel()).addRow(new String[] { md });
+                            }
+                        }
+                    }
+                }
+
+            }
+        });
         //
 
         // IModelFieldGroup groups[] = new IModelFieldGroup[] {
@@ -370,7 +485,7 @@ public class OrgPanel extends GridBagPanel {
                         // DefaultTableModel model = new DefaultTableModel(columns,0);
                         JTable insideTable = new JTable(rows, headers);
 
-                        table.setRowHeight(row, 20 + (15 * insideTable.getRowCount()));
+                        table.setRowHeight(row, 20 + (15 * insideTable.getSelectedRowCount()));
                         JScrollPane columnFix = new JScrollPane(insideTable);
                         columnFix.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 
@@ -393,5 +508,22 @@ public class OrgPanel extends GridBagPanel {
 
             }
         });
+    }
+    private boolean isIn(JTable table, String element){
+        for (int i = 0; i < table.getRowCount(); i++){
+            if (table.getValueAt(i, 0).toString().equals(element)){
+                return true;
+            }
+        }
+        return false;
+    }
+    private int findRow(JTable table, String element){
+        for (int i = 0; i < table.getRowCount(); i++){
+            if (table.getValueAt(i, 0).toString().equals(element)){
+                return i;
+            }
+        }
+        System.out.println("Couldnt find "+element);
+        return -1;
     }
 }

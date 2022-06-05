@@ -22,7 +22,7 @@ import ru.avicomp.ontapi.OntologyModel;
 public class OntologyFunc {
     OWLOntologyManager manager = OntManagers.createONT();
 	OWLDataFactory factory = manager.getOWLDataFactory();
-	File file = new File(this.getClass().getResource("").getPath(),"../../../../../data/CB_PDO_V4.owl");
+	// File file = new File(this.getClass().getResource("").getPath(),"../../../../../data/CB_PDO_V4.owl");
 	File file2 = new File(this.getClass().getResource("").getPath(),"../../../../../data/CB_PDO_V7.owl");
 	
 	OWLOntology ontology;
@@ -32,18 +32,18 @@ public class OntologyFunc {
         System.out.println("Load Ontology: " + LoadOntology2());
     }
 
-    public boolean LoadOntology() {
-		try {
-			ontology = manager.loadOntologyFromOntologyDocument(file);
-			o = (OntologyModel)ontology;
-			return true;	
-		}
-		catch (OWLOntologyCreationException e) {
-			System.err.println("Error creating OWL ontology: " + e.getMessage());
-			//	System.exit(-1);
-			return false;
-		} 	
-	}
+    // public boolean LoadOntology() {
+	// 	try {
+	// 		ontology = manager.loadOntologyFromOntologyDocument(file);
+	// 		o = (OntologyModel)ontology;
+	// 		return true;	
+	// 	}
+	// 	catch (OWLOntologyCreationException e) {
+	// 		System.err.println("Error creating OWL ontology: " + e.getMessage());
+	// 		//	System.exit(-1);
+	// 		return false;
+	// 	} 	
+	// }
 
 	public OntologyFunc(String str){
         System.out.println("Load Ontology2: " + LoadOntology2());
