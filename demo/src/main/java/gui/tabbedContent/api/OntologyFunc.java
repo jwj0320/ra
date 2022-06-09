@@ -22,7 +22,7 @@ import ru.avicomp.ontapi.OntologyModel;
 public class OntologyFunc {
     OWLOntologyManager manager = OntManagers.createONT();
 	OWLDataFactory factory = manager.getOWLDataFactory();
-	// File file = new File(this.getClass().getResource("").getPath(),"../../../../../data/CB_PDO_V4.owl");
+	File file = new File(this.getClass().getResource("").getPath(),"../../../../../data/CB_PDO_V7 (1).owl");
 	File file2 = new File(this.getClass().getResource("").getPath(),"../../../../../data/CB_PDO_V7.owl");
 	
 	OWLOntology ontology;
@@ -32,18 +32,18 @@ public class OntologyFunc {
         System.out.println("Load Ontology: " + LoadOntology2());
     }
 
-    // public boolean LoadOntology() {
-	// 	try {
-	// 		ontology = manager.loadOntologyFromOntologyDocument(file);
-	// 		o = (OntologyModel)ontology;
-	// 		return true;	
-	// 	}
-	// 	catch (OWLOntologyCreationException e) {
-	// 		System.err.println("Error creating OWL ontology: " + e.getMessage());
-	// 		//	System.exit(-1);
-	// 		return false;
-	// 	} 	
-	// }
+    public boolean LoadOntology() {
+		try {
+			ontology = manager.loadOntologyFromOntologyDocument(file);
+			o = (OntologyModel)ontology;
+			return true;	
+		}
+		catch (OWLOntologyCreationException e) {
+			System.err.println("Error creating OWL ontology: " + e.getMessage());
+			//	System.exit(-1);
+			return false;
+		} 	
+	}
 
 	public OntologyFunc(String str){
         System.out.println("Load Ontology2: " + LoadOntology2());
@@ -118,6 +118,58 @@ public class OntologyFunc {
 		}	
 		
 		return listvector;
+	}
+
+	public ArrayList<String> LoadTacticFromTech(String tech){
+		ArrayList<String> list = new ArrayList<String>();
+		String queryString = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
+				+ "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n"
+				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+				+ "PREFIX PDO: <http://www.semanticweb.org/PDO#>\n"
+				+ "PREFIX CBSAO: <http://www.semanticweb.org/CBSAO#>\n"
+				+ "SELECT ?tactic_l\n"
+				+ "WHERE { \n"
+				+ "  ?tech rdfs:label \""+ tech +"\".\n"
+				+ "  ?tech PDO:constitute_tactics ?tactic.\n"
+				+ "  ?tactic rdfs:label ?tactic_l.\n"
+				+ "}"
+				+ "ORDER BY ASC(?tactic_l)";
+		Query query = QueryFactory.create(queryString);
+		QueryExecution qe = QueryExecutionFactory.create(query, o.asGraphModel());
+		ResultSet res = qe.execSelect();
+		while (res.hasNext()) {
+			QuerySolution qs = res.next();
+			String s1 = qs.get("tactic_l").toString();
+			list.add(s1);
+		}
+		
+		return list;
+	}
+
+	public ArrayList<String> LoadMitigationFromTech(String tech){
+		ArrayList<String> list = new ArrayList<String>();
+		String queryString = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
+				+ "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n"
+				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+				+ "PREFIX PDO: <http://www.semanticweb.org/PDO#>\n"
+				+ "PREFIX CBSAO: <http://www.semanticweb.org/CBSAO#>\n"
+				+ "SELECT ?miti_l\n"
+				+ "WHERE { \n"
+				+ "  ?tech rdfs:label \""+ tech +"\".\n"
+				+ "  ?tech PDO:mitigated_by ?miti.\n"
+				+ "  ?miti rdfs:label ?miti_l.\n"
+				+ "}"
+				+ "ORDER BY ASC(?miti_l)";
+		Query query = QueryFactory.create(queryString);
+		QueryExecution qe = QueryExecutionFactory.create(query, o.asGraphModel());
+		ResultSet res = qe.execSelect();
+		while (res.hasNext()) {
+			QuerySolution qs = res.next();
+			String s1 = qs.get("miti_l").toString();
+			list.add(s1);
+		}
+		
+		return list;
 	}
 
 

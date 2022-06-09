@@ -239,7 +239,7 @@ public class GridBagPanel extends JPanel {
     protected JLabel makeHeader(String text){
         JLabel label = new JLabel(" "+text+" ");
         label.setBorder(BorderFactory.createLineBorder(Color.gray));
-        // label.setPreferredSize(new Dimension(140,30));
+        // label.setPreferredSize(new Dimension(100,30));
         
         return label;
     }

@@ -38,17 +38,17 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 import gui.tabbedContent.api.OntologyFunc;
-import gui.tabbedContent.type.Software;
-import gui.tabbedContent.type.TabbedPaneInfo;
-import gui.tabbedContent.type.Technique;
+import type.Software;
+import type.TabbedPaneInfo;
+import type.Technique;
+import type.Threat;
+import type.ProcessedData;
 
 public class AtkPanel extends GridBagPanel {
 
     OntologyFunc ontologyFunc = new OntologyFunc();
     JTable techTable;
     JTable softTable;
-    String[][] techniques;
-    String[][] softwares;
 
     public AtkPanel(TabbedPaneInfo tabbedPane){
         super(tabbedPane);
@@ -111,6 +111,23 @@ public class AtkPanel extends GridBagPanel {
         JButton nextButton = new JButton("Next");
         addGBLComponent(nextButton, 1, 3,0.0,0.1,"NONE",GridBagConstraints.LAST_LINE_END);
 
+        nextButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (Technique t : ProcessedData.techniqueList){
+                    Threat threat = new Threat();
+                    threat.setTechnique(t);
+                    threat.setSoftwareList(ProcessedData.getSWListInTech(t));
+                    threat.setTacticList(ontologyFunc.LoadTacticFromTech(t.getName()));
+                    threat.setMitigationList(ontologyFunc.LoadMitigationFromTech(t.getName()));
+                    System.out.println("miti_size: "+ threat.getMitigationList().size());
+                    ProcessedData.threatList.add(threat);
+                    ((RiskPanel)(tabbedPane.getComponentAt(tabbedPane.getSelectedIndex()+1))).updateTable();
+                }
+                tabbedPane.setSelectedIndex(tabbedPane.getSelectedIndex()+1);
+            }
+        });
+
 
         groupButton.addActionListener(new ActionListener() {
             @Override
@@ -144,11 +161,11 @@ public class AtkPanel extends GridBagPanel {
     }
 
     private void updateTable(){
-        for (String[] t:techniques){
-            ((DefaultTableModel) techTable.getModel()).addRow(t);
+        for (Technique t:ProcessedData.techniqueList){
+            ((DefaultTableModel) techTable.getModel()).addRow(new String[]{t.getName()});
         }
-        for (String[] s:softwares){
-            ((DefaultTableModel) softTable.getModel()).addRow(s);
+        for (Software s:ProcessedData.softwareList){
+            ((DefaultTableModel) softTable.getModel()).addRow(new String[]{s.getName()});
         }
     }
 
@@ -279,16 +296,21 @@ public class AtkPanel extends GridBagPanel {
                 ArrayList<String[]> swList=new ArrayList<String[]>();
                 for (String[] t:techs){
                     tech=t[0];
+                    ProcessedData.techniqueList.add(new Technique(tech));
                     for (String software : ontologyFunc.LoadTechSW(tech)) {
                         for (String groupSW : groupSWList) {
                             if (groupSW.equals(software)){
-                                swList.add(new String[]{software});
+                                // swList.add(new String[]{software});
+                                if (!ProcessedData.containsSoftware(software)){
+                                    ProcessedData.softwareList.add(new Software(software));
+
+                                }
                             }
                         }
                     }
                 }
-                techniques=techs;
-                softwares=(String[][])swList.stream().toArray(String[][]::new);
+                // techniques=techs;
+                // softwares=(String[][])swList.stream().toArray(String[][]::new);
                 updateTable();
                 groupDialog.dispose();
             }
@@ -637,17 +659,18 @@ public class AtkPanel extends GridBagPanel {
         //     swTechs[i]=techList.get(i)[0];
         // }
 
-        software.setPlatforms(swPlatforms);
+        
         
         Technique[] techs= new Technique[techList.size()];
         for(int i=0;i<techList.size();i++){
             techs[i]=new Technique(techList.get(i)[0]);
         }
 
-        software.setTechniques(techs);
+        
         
         return software;
     }
+
 
     // private JPanel makeGrTab(JTabbedPane innerTPane){
     //     GridBagPanel panel = new GridBagPanel(innerTPane);

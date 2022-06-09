@@ -1,4 +1,4 @@
-package gui.tabbedContent.type;
+package type;
 
 public class Group {
     private Software[] softwares;

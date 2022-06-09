@@ -23,10 +23,10 @@ import gui.tabbedContent.AtkPanel;
 import gui.tabbedContent.OrgPanel;
 import gui.tabbedContent.RiskPanel;
 import gui.tabbedContent.SecReqPanel;
-import gui.tabbedContent.type.Group;
-import gui.tabbedContent.type.Software;
-import gui.tabbedContent.type.TabbedPaneInfo;
-import gui.tabbedContent.type.Technique;
+import type.Group;
+import type.Software;
+import type.TabbedPaneInfo;
+import type.Technique;
 
 
 

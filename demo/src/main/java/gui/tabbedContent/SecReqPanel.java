@@ -13,6 +13,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import io.github.qualtagh.swing.table.model.IModelFieldGroup;
@@ -21,8 +23,13 @@ import io.github.qualtagh.swing.table.model.ModelField;
 import io.github.qualtagh.swing.table.model.ModelFieldGroup;
 import io.github.qualtagh.swing.table.model.ModelRow;
 import io.github.qualtagh.swing.table.view.JBroTable;
+import type.ProcessedData;
+import type.Software;
+import type.Threat;
 
 public class SecReqPanel extends GridBagPanel{
+
+    JTable threatTable;
     
     public SecReqPanel(JTabbedPane tabbedPane){
         super(tabbedPane);
@@ -33,13 +40,9 @@ public class SecReqPanel extends GridBagPanel{
             )
         );
 
-        String[] nameHeader = {"Threat ID"};
-        String[][] threats = new String[12][1];
-        for (int i=0;i<threats.length;i++){
-            threats[i][0]="Threat "+(i+1);
-        }
+        String[] nameHeader = {"Threats"};
 
-        JTable threatTable = new JTable(threats,nameHeader);
+        threatTable = new JTable(new DefaultTableModel(nameHeader,0));
         JScrollPane threatTabSc = new JScrollPane(threatTable);
         threatTabSc.setPreferredSize(new Dimension(130,520));
         addGBLComponent(threatTabSc, 0, 0);
@@ -50,20 +53,23 @@ public class SecReqPanel extends GridBagPanel{
         JLabel label2=makeHeader("Software");
         JLabel label3=makeHeader("Mitigation");
 
-        JLabel labelA=makeContent("T1003.002:OS Credential Dumping: Security Account Manager");
-        JLabel labelB=makeContent("Credential Access");
+        JLabel labelA=makeContent("");
+        // JLabel labelB=makeContent("");
+        JTable tacticTable = makeContentTable();
+        JScrollPane tacticTabSc= new JScrollPane(tacticTable);
+        tacticTabSc.setPreferredSize(new Dimension(400,160));
         JTable softTable = makeContentTable();
-        ((DefaultTableModel)softTable.getModel()).addRow(new String[]{"S0154:Cobalt Strike"});
-        ((DefaultTableModel)softTable.getModel()).addRow(new String[]{"S0002:Mimikatz"});
+        // ((DefaultTableModel)softTable.getModel()).addRow(new String[]{"S0154:Cobalt Strike"});
+        // ((DefaultTableModel)softTable.getModel()).addRow(new String[]{"S0002:Mimikatz"});
         JScrollPane softTabSc = new JScrollPane(softTable);
-        softTabSc.setPreferredSize(new Dimension(130,230));
+        softTabSc.setPreferredSize(new Dimension(400,160));
         JTable mitiTable = makeContentTable();
-        ((DefaultTableModel)mitiTable.getModel()).addRow(new String[]{"M1028:Operating System Configuration"});
-        ((DefaultTableModel)mitiTable.getModel()).addRow(new String[]{"M1027:Password Policies"});
-        ((DefaultTableModel)mitiTable.getModel()).addRow(new String[]{"M1026:Privileged Account Management"});
-        ((DefaultTableModel)mitiTable.getModel()).addRow(new String[]{"M1017:User Training"});
+        // ((DefaultTableModel)mitiTable.getModel()).addRow(new String[]{"M1028:Operating System Configuration"});
+        // ((DefaultTableModel)mitiTable.getModel()).addRow(new String[]{"M1027:Password Policies"});
+        // ((DefaultTableModel)mitiTable.getModel()).addRow(new String[]{"M1026:Privileged Account Management"});
+        // ((DefaultTableModel)mitiTable.getModel()).addRow(new String[]{"M1017:User Training"});
         JScrollPane mitiTabSc = new JScrollPane(mitiTable);
-        mitiTabSc.setPreferredSize(new Dimension(200,230));
+        mitiTabSc.setPreferredSize(new Dimension(400,160));
 
 
         detailPane.addGBLComponent(label0, 0, 0,1,1,"BOTH");
@@ -73,7 +79,7 @@ public class SecReqPanel extends GridBagPanel{
         detailPane.addGBLComponent(softTabSc, 1, 2,2,1,"BOTH");
         detailPane.addGBLComponent(mitiTabSc, 1, 3,1,1,"BOTH");
         detailPane.addGBLComponent(labelA, 1, 0,1,1,"BOTH");
-        detailPane.addGBLComponent(labelB, 1, 1,1,1,"BOTH");
+        detailPane.addGBLComponent(tacticTabSc, 1, 1,1,1,"BOTH");
 
         System.out.println(detailPane.getPreferredSize());
         addGBLComponent(detailPane, 1, 0);
@@ -86,13 +92,13 @@ public class SecReqPanel extends GridBagPanel{
         JLabel label2_3=new JLabel("Prevent(PV) : ");
 
         JTextField dtField = new JTextField();
-        dtField.setPreferredSize(new Dimension(400,60));
+        dtField.setPreferredSize(new Dimension(300,60));
         JTextField rpField = new JTextField();
-        rpField.setPreferredSize(new Dimension(400,60));
+        rpField.setPreferredSize(new Dimension(300,60));
         JTextField pdField = new JTextField();
-        pdField.setPreferredSize(new Dimension(400,60));
+        pdField.setPreferredSize(new Dimension(300,60));
         JTextField pvField = new JTextField();
-        pvField.setPreferredSize(new Dimension(400,60));
+        pvField.setPreferredSize(new Dimension(300,60));
          
 
         inputPane.addGBLComponent(label2_0, 0, 0,1,1,"BOTH");
@@ -122,13 +128,35 @@ public class SecReqPanel extends GridBagPanel{
         
         inputPane.addGBLComponent(emptyLabel4, 0, 7,1,1,"BOTH");
 
-        System.out.println(inputPane.getPreferredSize());
         addGBLComponent(inputPane, 2, 0,2,1);
         System.out.println(new JButton("aa").getPreferredSize());
 
         JButton nextButton = new JButton("Next");
 
         addGBLComponent(nextButton, 3, 1,0.0,0.0,"NONE",GridBagConstraints.LINE_END);
+
+        threatTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            @Override
+            public void valueChanged(ListSelectionEvent e){
+                String value = threatTable.getValueAt(threatTable.getSelectedRow(), 0).toString();
+                Threat threat = ProcessedData.getThreat(value);
+                labelA.setText(threat.getTechnique().getName());
+                ((DefaultTableModel)tacticTable.getModel()).setRowCount(0);
+                for (String t:threat.getTacticList()){
+                    ((DefaultTableModel)tacticTable.getModel()).addRow(new String[]{t});
+                }
+                ((DefaultTableModel)softTable.getModel()).setRowCount(0);
+                for (Software s:threat.getSoftwareList()){
+                    ((DefaultTableModel)softTable.getModel()).addRow(new String[]{s.getName()});
+                }
+                ((DefaultTableModel)mitiTable.getModel()).setRowCount(0);
+                for (String m:threat.getMitigationList()){
+                    ((DefaultTableModel)mitiTable.getModel()).addRow(new String[]{m});
+                }
+                
+            }
+            
+        });
 
         // JButton nextButton = new JButton("Next");
 
@@ -269,6 +297,13 @@ public class SecReqPanel extends GridBagPanel{
 
         // addGBLComponent(nextButton, 1, 2,0.1,0.1,"NONE",GridBagConstraints.LINE_END);
 
+    }
+
+    public void updateTable(){
+        ((DefaultTableModel)threatTable.getModel()).setRowCount(0);
+        for (Threat t : ProcessedData.threatList) {
+            ((DefaultTableModel)threatTable.getModel()).addRow(new String[] { t.getName() });
+        }
     }
 
 }

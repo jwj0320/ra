@@ -35,7 +35,7 @@ import io.github.qualtagh.swing.table.model.ModelRow;
 import io.github.qualtagh.swing.table.view.JBroTable;
 
 public class OrgPanel extends GridBagPanel {
-    // 선택 역방향 추가 필요
+    // 선택 역방향 추가 필요, titledborder 추가 필요
 
     public OrgPanel(JTabbedPane tabbedPane) {
         super(tabbedPane);

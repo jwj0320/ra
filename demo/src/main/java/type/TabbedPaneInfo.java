@@ -1,4 +1,4 @@
-package gui.tabbedContent.type;
+package type;
 
 import java.util.ArrayList;
 
